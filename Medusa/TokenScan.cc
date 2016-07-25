@@ -21,7 +21,7 @@ private:
 	ifstream in;
 
 public:
-	FileLex(string s, string t) :source(s), target(t), scan(&CScan)
+	FileLex(string& s, string& t) :source(s), target(t), scan(&CScan)
 	{
 		in.open(source);
 	}
@@ -78,7 +78,7 @@ CLex::~CLex()
 	delete[] trans;
 }
 
-bool CLex::run(ifstream& source,string target)
+bool CLex::run(ifstream& source,string& target)
 {
 	string cline;
 	map<int,int>::iterator iter;
@@ -146,14 +146,14 @@ void FileLex::printfObj()
 	ofstream out(target);
 	for (size_t i = 0; i<lines.size(); ++i)
 	{
-		out<<"line:"<<lines[i]->l<<"	";
-		out << endl;
+		out<<"line "<<lines[i]->l<<"	: ";
 		line * newl = lines[i];
 		for (size_t j = 0; j<newl->tokens.size(); ++j)
 		{
 			token* newt = newl->tokens[j];
-			out<<newt->value<<"("<<type_prompt[newt->type]<<")"<<endl;
+			out<<newt->value<<"("<<type_prompt[newt->type]<<")"<<' ';
 		}
+		out << endl;
 	}
 
 	out.close();
@@ -162,7 +162,6 @@ void FileLex::printfObj()
 
 int main()
 {
-
 	string source("./test/test.c");
 	string target("./test/test.o");
 	FileLex *fScan = new FileLex(source,target);

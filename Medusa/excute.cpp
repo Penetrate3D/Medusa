@@ -14,7 +14,7 @@ StatementResult excute_block(vector<Statement*>& block, MdsEnv* e)
 	return StatementResult();
 }
 
-MdsObject** MdsEnv::find_var(string name)//·µ»ØÖ¸ÕëÊÇÎªÁËÅĞ¶Ï´íÎó¸ü·½±ã£¬ºóĞø´¦ÀíÓ¦¸ÃÓĞ¸´ÖÆ²Ù×÷
+MdsObject** MdsEnv::find_var(const string& name)//·µ»ØÖ¸ÕëÊÇÎªÁËÅĞ¶Ï´íÎó¸ü·½±ã£¬ºóĞø´¦ÀíÓ¦¸ÃÓĞ¸´ÖÆ²Ù×÷
 {
 	map<string, MdsObject*>::iterator it; 
 	it = var_list.find(name);
@@ -25,7 +25,7 @@ MdsObject** MdsEnv::find_var(string name)//·µ»ØÖ¸ÕëÊÇÎªÁËÅĞ¶Ï´íÎó¸ü·½±ã£¬ºóĞø´¦À
 	return parent->find_var(name);
 }
 
-void MdsEnv::append_var(string name, MdsObject* value)
+void MdsEnv::append_var(const string& name, MdsObject* value)
 {
 	map<string, MdsObject*>::iterator it;
 	it = var_list.find(name);

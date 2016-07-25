@@ -1,6 +1,8 @@
 #ifndef PASER_H
 #define PASER_H
 
+#pragma warning(disable:4996)
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -172,13 +174,16 @@ class Statement{
 public:
 	Statement(){};
 	virtual ~Statement() { };
-	virtual StatementResult excute(MdsEnv* e) { return StatementResult(); }
+	virtual StatementResult excute(MdsEnv* e) { 
+		return StatementResult(); 
+	}
 };
 
 class ReturnStatement :public Statement{
 	NodeAST* _ret_value;
 public:
-	ReturnStatement(NodeAST* ret) :_ret_value(ret){
+	ReturnStatement(NodeAST* ret) :
+		_ret_value(ret){
 	}
 
 	~ReturnStatement(){
@@ -221,8 +226,8 @@ class CondStatement :public Statement
 	vector<Statement*> block2;
 
 public:
-	CondStatement(NodeAST* c, vector<Statement*> b1, vector<Statement*> b2) :
-		cond(c), block1(b1),block2(b2){}
+	CondStatement(NodeAST* c, vector<Statement*>& b1, vector<Statement*>& b2) :
+		cond(c), block1(b1),block2(b2){ }
 
 	~CondStatement(){
 		delete cond;
@@ -239,7 +244,7 @@ class LoopStatement :public Statement
 	vector<Statement*> block;
 
 public:
-	LoopStatement(NodeAST* c, vector<Statement*> b) :
+	LoopStatement(NodeAST* c, vector<Statement*>& b) :
 		cond(c), block(b){};
 
 	~LoopStatement(){
@@ -268,7 +273,7 @@ public:
 		free_vector(_body);
 	}
 
-	MdsDefFunction(vector<string> args, vector<Statement*> body)
+	MdsDefFunction(vector<string>& args, vector<Statement*>& body)
 		:MdsFunc(false),  _args(args), _body(body){ }
 };
 

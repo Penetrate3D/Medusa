@@ -51,7 +51,7 @@ private:
 public:
 	CLex();
 	~CLex();
-	bool run(ifstream& source,string outfile);
+	bool run(ifstream& source,string& outfile);
 };
 
 extern vector<line*> lines;

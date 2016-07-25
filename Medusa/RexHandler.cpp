@@ -184,7 +184,7 @@ state::~state()
 	}
 }
 
-RexHandler::RexHandler(vector<pair<string, int>> s) :start(NULL), rex(s){
+RexHandler::RexHandler(const vector<pair<string, int>>& s) :start(NULL), rex(s){
 
 }
 
@@ -337,7 +337,7 @@ void RexHandler::step(vector<state*>* c,vector<state*>* n,char str)
 	}
 }
 
-bool RexHandler::SimulateNfa(string t,int type)//type = ID,NUM,COMMENT...判断string是否符合正则规则
+bool RexHandler::SimulateNfa(const string& t,int type)//type = ID,NUM,COMMENT...判断string是否符合正则规则
 {
 	const char* cptr = t.c_str();
 	vector<state*> clist,nlist,*pc,*pn,*tmp;
@@ -480,72 +480,72 @@ int RexHandler::Scan(string s)
 	
 }
 
-/*
-int main(int argc, char* argv[])
-{
-	vector<pair<string,int>> rexs;
-//	regexps.push_back(REX_NEWL+REX_NEWL);
-	string s0("def|if|while|return|break|continue|else");
-	string s1("\\\\+|-|\\\\*|/|=");
-	string s2("<|>|==|>=|<=|!=");
-	string s3("\\(|\\)|{|}");
-	string s4("-?"+REX_NUMBER+REX_ADD);
-	string s9("\"" + REX_LPAREN + REX_CHAR + "|" + REX_NUMBER + "|" + REX_WHITE + REX_RPAREN + REX_ADD +"\"");
-	string s5(REX_CHAR+REX_LPAREN+REX_CHAR+REX_OR+REX_NUMBER+REX_RPAREN+REX_MUL);
-	string s6("#"+REX_LPAREN+REX_CHAR+REX_OR+REX_NUMBER+REX_OR+REX_WHITE+REX_RPAREN+REX_MUL+REX_NEWL);
-	string s7(REX_WHITE);
-	string s8(REX_NEWL);
-	
-	char* out = re2post(s0.c_str());
-	rexs.push_back(pair<string, int>(string(out), KEYWORD));
 
-	out = re2post(s1.c_str());
-	rexs.push_back(pair<string, int>(string(out), OPERATION));
-
-	out = re2post(s2.c_str());
-	rexs.push_back(pair<string, int>(string(out), COMPARASION));
-
-	out = re2post(s3.c_str());
-	rexs.push_back(pair<string, int>(string(out), BRAKET));
-
-	out = re2post(s4.c_str());
-	rexs.push_back(pair<string, int>(string(out), NUM));
-
-	out = re2post(s9.c_str());
-	rexs.push_back(pair<string, int>(string(out), STRING));
-
-	out = re2post(s5.c_str());
-	rexs.push_back(pair<string, int>(string(out), ID));
-
-	out = re2post(s6.c_str());
-	rexs.push_back(pair<string, int>(string(out), COMMENT));
-
-	out = re2post(s7.c_str());
-	rexs.push_back(pair<string,int>(string(out),SPACE));
-
-	out = re2post(s8.c_str());
-	rexs.push_back(pair<string, int>(string(out), NEWL));
-
-	for (int i = 0; i < rexs.size(); ++i)
-		cout << rexs[i].first << endl;
-
-	//	cout<<(int)(char('\n'))<<endl;
-	//	RexHandler rh(s);					//写成RexHandler a(string(out)) 被解释成函数定义，WTF?
-	RexHandler rh(rexs);
-	state* f = rh.CreateNfa();
-		
-	rh.Nfa2Dfa();
-	rh.CreateTrans();
-
-	ifstream in("./test/test.c");
-	  string test;
-	while(getline(in,test))
-		rh.Scan(test);
-
+//int main(int argc, char* argv[])
+//{
+//	vector<pair<string,int>> rexs;
+////	regexps.push_back(REX_NEWL+REX_NEWL);
+//	string s0("def|if|while|return|break|continue|else");
+//	string s1("\\\\+|-|\\\\*|/|=");
+//	string s2("<|>|==|>=|<=|!=");
+//	string s3("\\(|\\)|{|}");
+//	string s4("-?"+REX_NUMBER+REX_ADD);
+//	string s9("\"" + REX_LPAREN + REX_CHAR + "|" + REX_NUMBER + "|" + REX_WHITE + REX_RPAREN + REX_ADD +"\"");
+//	string s5(REX_CHAR+REX_LPAREN+REX_CHAR+REX_OR+REX_NUMBER+REX_RPAREN+REX_MUL);
+//	string s6("#"+REX_LPAREN+REX_CHAR+REX_OR+REX_NUMBER+REX_OR+REX_WHITE+REX_RPAREN+REX_MUL+REX_NEWL);
+//	string s7(REX_WHITE);
+//	string s8(REX_NEWL);
+//	
+//	char* out = re2post(s0.c_str());
+//	rexs.push_back(pair<string, int>(string(out), KEYWORD));
+//
+//	out = re2post(s1.c_str());
+//	rexs.push_back(pair<string, int>(string(out), OPERATION));
+//
+//	out = re2post(s2.c_str());
+//	rexs.push_back(pair<string, int>(string(out), COMPARASION));
+//
+//	out = re2post(s3.c_str());
+//	rexs.push_back(pair<string, int>(string(out), BRAKET));
+//
+//	out = re2post(s4.c_str());
+//	rexs.push_back(pair<string, int>(string(out), NUM));
+//
+//	out = re2post(s9.c_str());
+//	rexs.push_back(pair<string, int>(string(out), STRING));
+//
+//	out = re2post(s5.c_str());
+//	rexs.push_back(pair<string, int>(string(out), ID));
+//
+//	out = re2post(s6.c_str());
+//	rexs.push_back(pair<string, int>(string(out), COMMENT));
+//
+//	out = re2post(s7.c_str());
+//	rexs.push_back(pair<string,int>(string(out),SPACE));
+//
+//	out = re2post(s8.c_str());
+//	rexs.push_back(pair<string, int>(string(out), NEWL));
+//
+//	for (int i = 0; i < rexs.size(); ++i)
+//		cout << rexs[i].first << endl;
+//
+//	//	cout<<(int)(char('\n'))<<endl;
+//	//	RexHandler rh(s);					//写成RexHandler a(string(out)) 被解释成函数定义，WTF?
+//	RexHandler rh(rexs);
+//	state* f = rh.CreateNfa();
+//		
+//	rh.Nfa2Dfa();
+//	rh.CreateTrans();
+//
+//	ifstream in("./test/test.c");
+//	  string test;
+//	while(getline(in,test))
+//		rh.Scan(test);
+//
 //	while (cin>>test)	//cin不能读\t 和 \n 日狗
 //		rh.Scan(test);
+//
+//	return 1;
+//}
 
-	return 1;
-}
-*/
 

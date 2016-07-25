@@ -523,13 +523,14 @@ Statement* MDSInterpretor::paser_statement()//处理顶层结构，paser_ast + 函数定义
 
 void MDSInterpretor::start()
 {
+	// 定义函数
 	if (_CurTok->value == "def")
 	{
 		NextToken();
 		if (_CurTok->type != ID)
 			throw PaserException(
 			"expect a identifier after keyword \'def\'");
-		string name = _CurTok->value;
+		string& name = _CurTok->value;
 		NextToken();
 		vector<string> args;
 		paser_args(args);

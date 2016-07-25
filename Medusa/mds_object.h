@@ -148,8 +148,8 @@ public:
 		mds_local_list.erase(it);
 	}
 
-	MdsObject** find_var(string name);
-	void append_var(string, MdsObject*);
+	MdsObject** find_var(const string& name);
+	void append_var(const string&, MdsObject*);
 };
 
 

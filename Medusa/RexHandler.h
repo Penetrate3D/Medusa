@@ -40,11 +40,10 @@ public:
 	state();
 	~state();
 
-	state* AddEdge(Link* l)
+	void AddEdge(Link* l)
 	{
 		++links;
 		edges.push_back(l);
-		return this;
 	}
 
 };
@@ -63,7 +62,7 @@ public:
 
 	vector<state**> end;//代表状态自动机单元指向的state的指针
 
-	Fragment(state* s,vector<state**> e):start(s),end(e){ }
+	Fragment(state* s,const vector<state**>& e):start(s),end(e){ }
 };
 
 class RexHandler{
@@ -78,12 +77,12 @@ private:
 	map<int,int> DMatch;			//包含接受状态match的dstate,int为dstate编号，string为type
 
 public:
-	RexHandler(vector<pair<string, int>>);
+	RexHandler(const vector<pair<string, int>>& );
 	~RexHandler();
 
 	state* CreateNfa();
 
-	bool SimulateNfa(string target,int);
+	bool SimulateNfa(const string& target,int);
 
 	void Nfa2Dfa();
 	void CreateTrans();
