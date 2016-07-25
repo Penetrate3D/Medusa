@@ -5,11 +5,12 @@
 
 //空闲链表包含meta
 static list<char*> free_list[16];
-static int area_size[] = { 8, 16, 24, 32, 
-			40, 48, 56, 64, 
-			72, 80, 88, 96,
-			104, 112, 120, 128
-			};
+static int area_size[] = { 
+	8, 16, 24, 32, 
+	40, 48, 56, 64,
+	72, 80, 88, 96,
+	104, 112, 120, 128 
+};
 
 MdsMemPool::MdsMemPool() :remain_bytes(0), now(NULL){
 
