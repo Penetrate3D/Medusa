@@ -3,13 +3,13 @@
 #include "mem_allocator.h"
 #include "mds_object.h"
 
-//¿ÕÏĞÁ´±í°üº¬meta
+//ç©ºé—²é“¾è¡¨åŒ…å«meta
 static list<char*> free_list[16];
 static int area_size[] = { 8, 16, 24, 32, 
-						  40, 48, 56, 64, 
-						  72, 80, 88, 96,
-						  104, 112, 120, 128
-						};
+			40, 48, 56, 64, 
+			72, 80, 88, 96,
+			104, 112, 120, 128
+			};
 
 MdsMemPool::MdsMemPool() :remain_bytes(0), now(NULL){
 
@@ -48,7 +48,7 @@ char* MdsMemPool::alloc_mem2(size_t size, uchar num)
 	return r;
 }
 
-//sizeÊÇÓÃ»§ÉêÇëµÄ¿Õ¼ä´óĞ¡¼ÓÉÏmeta´óĞ¡
+//sizeæ˜¯ç”¨æˆ·ç”³è¯·çš„ç©ºé—´å¤§å°åŠ ä¸Šmetaå¤§å°
 char* MdsMemPool::alloc_mem(size_t s)
 {
 	uchar index = power_num(s);
@@ -99,7 +99,7 @@ MdsAllocator::~MdsAllocator(){
 
 }
 
-//size²»°üº¬metaµÄ´óĞ¡
+//sizeä¸åŒ…å«metaçš„å¤§å°
 char* MdsAllocator::mds_alloc(size_t size)
 {
 	char* meta;
@@ -174,7 +174,7 @@ char* MdsAllocator::mds_free(char *free)
 	size_t size = meta->size;
 	uchar idx = power_num(size);
 
-	//ÊÇÒ»¸öbig block£¬ĞèÒª·Ö½âblock
+	//æ˜¯ä¸€ä¸ªbig blockï¼Œéœ€è¦åˆ†è§£block
 	if (idx > 15)
 	{
 		discompose_block(block, size);
