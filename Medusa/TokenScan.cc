@@ -3,7 +3,7 @@
 #include "token.h"
 #include "paser.h"
 
-#include "vld.h"
+//#include "vld.h"
 
 #define TRANS(x,y) trans[x*256+y]
 
@@ -162,8 +162,12 @@ void FileLex::printfObj()
 
 int main()
 {
-	string source("./test/test.c");
-	string target("./test/test.o");
+//	string source("./test/test.mds");
+//	string target("./test/test.token");
+
+	string source("./test/gc_test.mds");
+	string target("./test/gc_test.token");
+
 	FileLex *fScan = new FileLex(source,target);
 
 	if (!fScan->ScanSource())

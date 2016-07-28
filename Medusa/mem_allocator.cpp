@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 
 #include "mem_allocator.h"
 #include "mds_object.h"
@@ -11,6 +12,10 @@ static int area_size[] = {
 	72, 80, 88, 96,
 	104, 112, 120, 128 
 };
+
+static int malloc_count = 0;
+
+void gc();
 
 MdsMemPool::MdsMemPool() :remain_bytes(0), now(NULL){
 
@@ -101,8 +106,14 @@ MdsAllocator::~MdsAllocator(){
 }
 
 //size不包含meta的大小
+
 char* MdsAllocator::mds_alloc(size_t size)
 {
+	//每分配16次内存执行一次gc
+	++malloc_count;
+	if ( malloc_count % 16 == 0)
+		gc();
+
 	char* meta;
 	size_t size_with_meta = size + sizeof(MdsBlockMeta);
 	uchar idx = power_num(size_with_meta);
@@ -163,14 +174,10 @@ char* MdsAllocator::mds_free(char *free)
 	char* block = (char*)meta;
 
 	set<char*>::iterator it = alloced.find(block);
-	if (it == alloced.end())
-	{
-		cout << "BUG: free a memblock that hasn't been alloced " << endl;
-		exit(1);
-	}
-	else{
-		alloced.erase(it);
-	}
+	assert(it != alloced.end());
+	
+	alloced.erase(it);
+
 
 	size_t size = meta->size;
 	uchar idx = power_num(size);
@@ -274,22 +281,27 @@ void gc_mark()
 void gc_sweep()
 {
 	map<size_t, MdsIntObject*>::iterator it_int = mds_int_map.begin();
-	for (; it_int != mds_int_map.end(); ++it_int)
+	//在erase后map的迭代器会失效，故只能先存储后删除
+	for (; it_int != mds_int_map.end();)
 	{
 		MdsBlockMeta* meta = (MdsBlockMeta*)it_int->second - 1;
 		if (!meta->marked)
 		{
-			destroy_int_object(it_int->second);
+			destroy_int_object(it_int);
 		}
+		else
+			++it_int;
 	}
 
 	map<size_t, MdsStringObject*>::iterator it_str = mds_str_map.begin();
-	for (; it_str != mds_str_map.end(); it_str++)
+	for (; it_str != mds_str_map.end();)
 	{
 		MdsBlockMeta* meta = (MdsBlockMeta*)it_str->second - 1;
 		if (!meta->marked){
-			destroy_string_object(it_str->second);
+			destroy_string_object(it_str);
 		}
+		else
+			it_str++;
 	}
 
 	map<size_t, MdsListObject*>::iterator it_list = mds_list_map.begin();
@@ -297,8 +309,10 @@ void gc_sweep()
 	{
 		MdsBlockMeta* meta = (MdsBlockMeta*)it_list->second - 1;
 		if (!meta->marked){
-			destroy_list_object(it_list->second);
+			destroy_list_object(it_list);
 		}
+		else
+			++it_list;
 	}
 }
 

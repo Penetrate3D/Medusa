@@ -104,13 +104,13 @@ public:
 
 //所有的析构函数都需要放弃map中对象
 MdsStringObject* get_string_object(const char *val);
-char* destroy_string_object(MdsStringObject* ob);
+char* destroy_string_object(map<size_t, MdsStringObject*>::iterator&);
 
 MdsIntObject* get_int_object(int val);
-char* destroy_int_object(MdsIntObject* ob);
+char* destroy_int_object(map<size_t, MdsIntObject*>::iterator&);
 
 MdsListObject* get_list_object(vector<MdsObject*>& list);
-char* destroy_list_object(MdsListObject* ob);
+char* destroy_list_object(map<size_t, MdsListObject*>::iterator&);
 
 MdsObject* int_int_(MdsObject*, MdsObject*, OperatorType);
 MdsObject* int_string_(MdsObject*, MdsObject*, OperatorType);

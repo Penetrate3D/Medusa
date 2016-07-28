@@ -88,17 +88,14 @@ MdsIntObject* get_int_object(int val){
 	return res;
 }
 
-char* destroy_int_object(MdsIntObject* ob){
+char* destroy_int_object(map<size_t, MdsIntObject*>::iterator &it){
 
-	size_t hash = mds_hash(ob->get_value());
-
-	map<size_t,MdsIntObject*>::iterator it = mds_int_map.find(hash);
 	assert(it != mds_int_map.end());
 
-	mds_int_map.erase(hash);
-
-	char* area = (char*)(ob);
+	char* area = (char*)(it->second);
 	mds_allocator.mds_free(area);
+
+	it = mds_int_map.erase(it);
 
 	return area;
 }
@@ -133,22 +130,16 @@ MdsStringObject* get_string_object(const char *val)
 	return ret;
 }
 
-char* destroy_string_object(MdsStringObject* ob)
+char* destroy_string_object(map<size_t, MdsStringObject*>::iterator& it)
 {
-	//后面的字符串未作处理，空间是随机的
-	char* v = (char*)(ob + 1);
-	string index(v);
-	size_t hash = mds_hash(index);
-
-	map<size_t, MdsStringObject*>::iterator it = mds_str_map.find(hash);
 	assert(it != mds_str_map.end());
 
 
-	mds_allocator.mds_free(ob->ob_val);
-
-	mds_str_map.erase(hash);
-	mds_allocator.mds_free((char*)ob);
-	return (char*)ob;
+	mds_allocator.mds_free(it->second->ob_val);
+	char* area = (char*)(it->second);
+	mds_allocator.mds_free(area);
+	it = mds_str_map.erase(it);
+	return area;
 }
 
 
@@ -189,16 +180,14 @@ MdsListObject* get_list_object(vector<MdsObject*>& list)
 }
 
 //需要防止重复destroy，所有的对象都放在map中，所以destroy前检查map中是否有此对象
-char* destroy_list_object(MdsListObject* ob){
-	size_t hash = mds_hash(ob->get_value());
-
-	map<size_t, MdsListObject*>::iterator it = mds_list_map.find(hash);
+char* destroy_list_object(map<size_t, MdsListObject*>::iterator& it){
 	assert(it != mds_list_map.end());
 
-	mds_allocator.mds_free((char*)(ob->list));
-	mds_list_map.erase(hash);
-	char* area = (char*)ob;
+	mds_allocator.mds_free((char*)(it->second->list));
+
+	char* area = (char*)it->second;
 	mds_allocator.mds_free(area);
+	it = mds_list_map.erase(it);
 
 	return area;
 }
