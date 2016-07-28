@@ -287,6 +287,8 @@ void gc_sweep()
 		MdsBlockMeta* meta = (MdsBlockMeta*)it_int->second - 1;
 		if (!meta->marked)
 		{
+			//map的erase操作有坑，iterater erase(iterater)返回+1的迭代器
+			//而void erase(iterater)迭代器不自增，需要map.erase(iter++)操作
 			destroy_int_object(it_int);
 		}
 		else
