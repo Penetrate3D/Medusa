@@ -111,7 +111,7 @@ char* MdsAllocator::mds_alloc(size_t size)
 {
 	//每分配16次内存执行一次gc
 	++malloc_count;
-	if ( malloc_count % 16 == 0)
+	if ((malloc_count & 15) == 0)
 		gc();
 
 	char* meta;
